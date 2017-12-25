@@ -12,68 +12,61 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 /**
  * Random Forest
- *
  */
 public class RandomForest {
 
     /**
-     * the number of threads to use when generating the forest
      * 可用的线程数量
      * */
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
-    //private static final int NUM_THREADS=2;
-    /** the number of categorical responses of the data (the classes, the "Y" values)
-     * set this before beginning the forest creation
-     * target类别数量
+    /** 
+     *target类别数量
      * */
     public static int C;
-    /** the number of attributes in the data
-     * set this before beginning the forest creation
+    /** 
      * 属性（列）的数量
      * */
     public static int M;
-    /** Of the M total attributes, the random forest computation requires a subset of them
-     * to be used and picked via random selection. "Ms" is the number of attributes in this
-     * subset. The formula used to generate Ms was recommended on Breiman's website.
+    /** 
      *属性扰动，每次从M个属性中随机选取Ms个属性，Ms = log2(M)
      */
     public static int Ms;
     /** the collection of the forest's decision trees */
     private ArrayList<DTree> trees;
-    /** the starting time when timing random forest creation
+    /** 
      * 开始时间
      * */
     private long time_o;
     /** the number of trees in this random tree */
     private int numTrees;
-    /** For progress bar display for the creation of this random forest,
-     * this is the amount to update by when one tree is completed */
+    /** 
+     * 为了实时显示进度，每建立一棵树的更新量
+     */
     private double update;
-    /** For progress bar display for the creation of this random forest,
-     * this records the total progress */
+    /**
+     * 为了实时显示进度，初试值 
+     */
     private double progress;
-    /** this is an array whose indices represent the forest-wide importance for that given attribute */
+    /** importance Array  */
     private int[] importances;
-    /** This maps from a data record to an array that records the classifications by the trees
-     * where it was a "left out" record (the indices are the class and the values are the counts) */
+    /** key = a record from data matrix
+     * value = RF的分类结果*/
     private HashMap<int[],int[]> estimateOOB;
-    /** This holds all of the predictions of trees in a Forest */
+    /** all of the predictions from RF */
     private ArrayList<ArrayList<Integer>> Prediction;
-    /** the total forest-wide error */
+    /** RF的错误率 */
     private double error;
-    /** the thread pool that controls the generation of the decision trees */
+    /** 控制树生长的进程池 */
     private ExecutorService treePool;
-    /** the original training data matrix that will be used to generate the random forest classifier */
+    /** 原始训练数据 */
     private ArrayList<int[]> train_data;
-    /** the data on which produced random forest will be tested*/
+    /** 测试数据*/
     private ArrayList<int[]> testdata;
     /**
-     * Initializes a Random forest creation
-     *
-     * @param numTrees			the numb of trees in the forest
-     * @param train_data		the training data used to generate the forest
-     * @param t_data			the test data used to evaluate the forest
-     * param buildProgress		records the progress of the random forest creation
+     * Initializes a Random forest 
+     * @param numTrees			RF的数量
+     * @param train_data		原始训练数据
+     * @param t_data			测试数据
      */
     public RandomForest(int numTrees, ArrayList<int[]> train_data, ArrayList<int[]> t_data ){
         this.numTrees = numTrees;
@@ -87,12 +80,11 @@ public class RandomForest {
         System.out.println("total data size is "+train_data.size());
         System.out.println("number of attributes " + (train_data.get(0).length-1));
         System.out.println("number of selected attributes " + ((int)Math.round(Math.log(train_data.get(0).length-1)/Math.log(2) + 1)));
-//		ArrayList<Datum> master=AssignClassesAndGetAllData(data);
         estimateOOB = new HashMap<int[],int[]>(train_data.size());
         Prediction = new ArrayList<ArrayList<Integer>>();
     }
     /**
-     * Begins the random forest creation
+     * Begins the creation of random forest 
      */
     public void Start() {
         System.out.println("Num of threads started : " + NUM_THREADS);
@@ -109,19 +101,16 @@ public class RandomForest {
         } catch (InterruptedException ignored){
             System.out.println("interrupted exception in Random Forests");
         }
-//	    buildProgress.setValue(100); //just to make sure
         System.out.println("");
         System.out.println("Finished tree construction");
         TestForest(trees, testdata);
-        //CalcErrorRate();
         CalcImportances();
         System.out.println("Done in "+TimeElapsed(time_o));
     }
 
     /**
      * @param collec_tree   the collection of the forest's decision trees
-     * @param test_data	    the data on which produced random forest will be tested
-     *
+     * @param test_data	    测试数据集
      */
     private void TestForest(ArrayList<DTree> collec_tree, ArrayList<int[]> test_data ) {
         int correstness = 0 ;
@@ -134,7 +123,6 @@ public class RandomForest {
         for(DTree dt:collec_tree){
             dt.CalculateClasses(test_data, treeNumber);
             Prediction.add(dt.predictions);
-            //dt.CalcTreeErrorRate(test_data, treee);
             treeNumber++;
         }
         for(int i = 0; i<test_data.size(); i++){
@@ -172,10 +160,7 @@ public class RandomForest {
         return maxclass;
     }
     /**
-     * This calculates the forest-wide error rate. For each "left out" data record ,
-     * if the class with the maximum count is equal to its actual
-     * class, then increment the number of correct. One minus the number correct
-     * over the total number is the error rate.
+     * 计算RF的分类错误率
      */
     private void CalcErrorRate(){
         double N=0;
@@ -192,11 +177,9 @@ public class RandomForest {
         System.out.println("Forest error rate % is: "+(error*100));
     }
     /**
-     * Update the error map by recording a class prediction
-     * for a given data record
-     *
-     * @param record	the data record classified
-     * @param Class		the class
+     * 更新  OOBEstimate
+     * @param record	        a record from data matrix
+     * @param Class		
      */
     public void UpdateOOBEstimate(int[] record, int Class){
         if (estimateOOB.get(record) == null){
@@ -210,7 +193,7 @@ public class RandomForest {
         }
     }
     /**
-     * This calculates the forest-wide importance levels for all attributes.
+     * calculates the importance levels for all attributes.
      */
     private void CalcImportances() {
         importances = new int[M];
@@ -220,39 +203,33 @@ public class RandomForest {
         }
         for (int i=0;i<M;i++)
             importances[i] /= numTrees;
-        //print forest-wide importance
         System.out.println("The forest-wide importance as follows:");
         for (int j=0; j<importances.length; j++){
             System.out.println("Attr" + j + ":" + importances[j]);
         }
-
-		//Datum.PrintImportanceLevels(importances);
     }
-    /** Start the timer when beginning forest creation */
+    /** 计时开始 */
     private void StartTimer(){
         time_o = System.currentTimeMillis();
     }
     /**
-     * This class houses the machinery to generate one decision tree in a thread pool environment.
-     * @author EDGIS
+     * 创建一棵决策树
      */
-    private class CreateTree implements Runnable{ //  (data, this, t+1)
-        /** the training data to generate the decision tree (same for all trees) */
+    private class CreateTree implements Runnable{ 
+        /** 训练数据 */
         private ArrayList<int[]> train_data;
-        /** the current forest */
+        /** 随机森林 */
         private RandomForest forest;
-        /** the Tree number */
+        /** the numb of RF */
         private int treenum;
-        /**
-         * A default, dummy constructor
-         */
+   
         public CreateTree(ArrayList<int[]> train_data, RandomForest forest, int num){
             this.train_data = train_data;
             this.forest = forest;
             this.treenum = num;
         }
         /**
-         * Creates the decision tree
+         * Create the decision tree
          */
         public void run() {
             System.out.println("Creating a Dtree num : " + treenum + " ");
@@ -263,36 +240,9 @@ public class RandomForest {
         }
     }
 
-//	private ArrayList<Datum> AssignClassesAndGetAllData(HashMap<String,ArrayList<Datum>> data){
-//		classMap=new HashMap<Integer,String>(Run.it.numPhenotypes());
-//		classMap.put(0,Phenotype.NON_NAME);
-//
-//		ArrayList<Datum> master=new ArrayList<Datum>();
-//		int c=0;
-//
-//		ArrayList<Datum> sub;
-//		sub=data.get(Phenotype.NON_NAME);
-//		for (Datum d:sub)
-//			d.AddClass(c);
-//		master.addAll(sub);
-//
-//		for (String name:Run.it.getPhenotyeNamesSaveNON()){
-//			c++;
-//			classMap.put(c,name);
-//			sub=data.get(name);
-//			for (Datum d:sub)
-//				d.AddClass(c);
-//			master.addAll(sub);
-//		}
-//		return master;
-//	}
-
     /**
-     * Evaluates an incoming data record.
-     * It first allows all the decision trees to classify the record,
-     * then it returns the majority vote
-     *
-     * @param record		the data record to be classified
+     * Evaluates testdata
+     * @param record	a record to be evaluated
      */
     public int Evaluate(int[] record){
         int[] counts=new int[C];
@@ -302,48 +252,10 @@ public class RandomForest {
         }
         return FindMaxIndex(counts);
     }
-    /**
-     * Given an array, return the index that houses the maximum value
-     *
-     * @param arr	the array to be investigated
-     * @return		the index of the greatest value in the array
-     */
-    public static int FindMaxIndex(int[] arr){
-        int index=0;
-        int max=Integer.MIN_VALUE;
-        for (int i=0;i<arr.length;i++){
-            if (arr[i] > max){
-                max=arr[i];
-                index=i;
-            }
-        }
-        return index;
-    }
-
-//	//ability to clone forests
-//	private RandomForest(ArrayList<DTree> trees,int numTrees){
-//		this.trees=trees;
-//		this.numTrees=numTrees;
-//	}
-//	public RandomForest clone(){
-//		ArrayList<DTree> copy=new ArrayList<DTree>(numTrees);
-//		for (DTree tree:trees)
-//			copy.add(tree.clone());
-//		return new RandomForest(copy,numTrees);
-//	}
-    /**
-     * Attempt to abort random forest creation
-     */
-    public void Stop() {
-        treePool.shutdownNow();
-    }
 
     /**
-     * Given a certain time that's elapsed, return a string
-     * representation of that time in hr,min,s
-     *
-     * @param timeinms	the beginning time in milliseconds
-     * @return			the hr,min,s formatted string representation of the time
+     * @param timeinms	        开始时间
+     * @return			the hr,min,s 
      */
     private static String TimeElapsed(long timeinms){
         int s=(int)(System.currentTimeMillis()-timeinms)/1000;
