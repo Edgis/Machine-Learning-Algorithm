@@ -9,7 +9,6 @@ import java.util.*;
 
 /**
  * Creates a decision tree based on the specifications of random forest trees
- *
  */
 public class DTree {
 
