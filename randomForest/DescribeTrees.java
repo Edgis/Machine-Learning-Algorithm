@@ -35,7 +35,7 @@ public class DescribeTrees {
                     }
                     int[] DataPoint = new int[spaceIndex.size()-1];
                     for(i=0; i<spaceIndex.size()-1; i++){
-                        DataPoint[i]=Integer.parseInt(sCurrentLine.substring(spaceIndex.get(i)+1, spaceIndex.get(i+1)));//substring() 左闭右开 [ )
+                        DataPoint[i]=Integer.parseInt(sCurrentLine.substring(spaceIndex.get(i)+1, spaceIndex.get(i+1)));
                     }
                     /* print DataPoint
                     for(k=0; k<DataPoint.length; k++){
@@ -46,10 +46,6 @@ public class DescribeTrees {
                     }
                     **/
                     DataInput.add(DataPoint);
-                    //for(int t=0;t<DataInput.get(0).length;t++){
-                    //   System.out.print(DataInput.get(0)[t]+",");
-                    // }
-                    //System.out.println("");
                 }
             }
 
