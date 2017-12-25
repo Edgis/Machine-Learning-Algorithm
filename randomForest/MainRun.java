@@ -1,5 +1,5 @@
 /**
- * Random-Forest implementation with JAVA
+ * Random-Forest implementation with JAVA 
  * @Author EDGIS
  * @Contact guoxianwhu@foxmail.com
  */
