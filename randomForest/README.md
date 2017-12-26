@@ -4,6 +4,7 @@
 - **Bagging与RandomForest的主要区别**
 - **RandomForest Algorithm**
 - **Main Feature**
+- **About DATA**
 -------------------
 
 
@@ -34,3 +35,9 @@ RF算法的训练过程如下所示：
 2. 属性数据采用的是连续属性（Continuous Attributes），在划分决策树节点，分成两个分叉
 
 3. 在代码的后面，增加了计算[**Variable Importance**](http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm#ooberr)的内容，理论知识可参考伯克利关于RF的Introduction
+
+
+## About DATA
+
+Data.txt是训练数据集， Text.txt是测试数据集，经线下测试，在使用上述train data建立100棵树的RF model，Test集的forest-wide Error可达到90%，同时发现Attr16和Attr17的Variable Importance较高
+
