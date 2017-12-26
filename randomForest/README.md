@@ -22,11 +22,11 @@ Bagging作为集成学习方法的一种，其主要的特征在于在对原始�
 
 在采用以决策树作为基学习器的RF算法中，决策树的建立与递归划分的过程主要采用西瓜书中的内容，如下所示：
 
-![决策树](http://img.blog.csdn.net/20171225214106036?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGl1eGlhbjQ3Mjg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![决策树](http://img.blog.csdn.net/20171225214106036)
 
 RF算法的训练过程如下所示：
 
-![RF](http://img.blog.csdn.net/20171225214337677?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGl1eGlhbjQ3Mjg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![RF](http://img.blog.csdn.net/20171225214337677)
 
 ## Main Feature
 
