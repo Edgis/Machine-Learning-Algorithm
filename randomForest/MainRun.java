@@ -12,8 +12,8 @@ public class MainRun {
     @SuppressWarnings("static-access")
     public static void main(String args[]){
 
-        String trainPath = "C:\\Users\\kwok\\Desktop\\Iron_rf_data\\Data.txt";
-        String testPath = "C:\\Users\\kwok\\Desktop\\Iron_rf_data\\Test.txt";
+        String trainPath = "C:\\Users\\kwok\\Desktop\\rf_data\\Data.txt";
+        String testPath = "C:\\Users\\kwok\\Desktop\\rf_data\\Test.txt";
         int numTrees = 100;
 
         DescribeTrees DT = new DescribeTrees(trainPath);
