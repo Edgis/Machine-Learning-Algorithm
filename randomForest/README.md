@@ -9,7 +9,7 @@
 -------------------
 
 
-##Bagging与randomForest的主要区别
+## Bagging与randomForest的主要区别
 
 
 Bagging作为集成学习方法的一种，其主要的特征在于在对原始数据采样中加入了**「数据扰动」**的部分，具体来说，主要是基于自助采样法 (bootstrap sampling)，给定包含 m 个样本的数据集，我们先随机取出一个样本放入采样集中，再把该样本放回原始数据集，这样，经过 m次随机采样操作，我们得到含 m 个样本的采样集，根据概率统计知识可知，原始数据集中约有 63.2%的样本出现在采样集中，其余36.8%的数据可用于袋外估计(out-of-bag estimate)。
@@ -19,7 +19,8 @@ Bagging作为集成学习方法的一种，其主要的特征在于在对原始�
 而randomForest算法与Bagging算法的主要区别在于，randomForest在Bagging的基础上增加了**「属性扰动」**部分，具体来说，以决策树作为基学习器为例，传统决策树在选择划分属性时，是在当前结点的属性集合(假定有 d 个属性)中选择一个最优属性，而在RF 中，对决策树的每个结点，先从该结点的属性集合中随机选择一个包含 k 个属性的子集（一般来说，k=log2(d)），然后再从这k个属性中选择一个最优属性用于划分。
 一般来说，RF在训练过程中加入了**「数据扰动」**和**「属性扰动」**，所以不需要剪枝就能达到很好的泛化效果。
 
-##RandomForest Algorithm
+## RandomForest Algorithm
+
 在采用以决策树作为基学习器的RF算法中，决策树的建立与递归划分的过程主要采用西瓜书中的内容，如下所示：
 
 ![决策树](http://img.blog.csdn.net/20171225214106036?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGl1eGlhbjQ3Mjg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
@@ -28,7 +29,8 @@ RF算法的训练过程如下所示：
 
 ![RF](http://img.blog.csdn.net/20171225214337677?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveGl1eGlhbjQ3Mjg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-##Main Feature
+## Main Feature
+
 1. 对程序的测试的数据采用了公开数据集NSL-KDD的数据集 <a href="http://www.unb.ca/cic/datasets/nsl.html" target="_blank"> [ NSL-KDD ]。
 
 2. 属性数据采用的是连续属性（Continuous Attributes），在划分决策树节点，分成两个分叉。
