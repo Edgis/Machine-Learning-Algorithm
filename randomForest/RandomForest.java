@@ -252,6 +252,19 @@ public class RandomForest {
         }
         return FindMaxIndex(counts);
     }
+    
+    public static int FindMaxIndex(int[] arr){
+        int index=0;
+        int max = Integer.MIN_VALUE;
+        for (int i=0;i<arr.length;i++){
+            if (arr[i] > max){
+                max=arr[i];
+                index=i;
+            }
+        }
+        return index;
+    }
+    
 
     /**
      * @param timeinms	        开始时间
